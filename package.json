@@ -1,0 +1,26 @@
+{
+  "name": "enhanced-github-projects",
+  "version": "0.1.0",
+  "description": "A chrome extension for better GitHub Projects",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch --mode=development",
+    "build:prod": "webpack --mode=production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kechol/enhanced-github-projects.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kechol/enhanced-github-projects/issues"
+  },
+  "homepage": "https://github.com/kechol/enhanced-github-projects#readme",
+  "devDependencies": {
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}

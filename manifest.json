@@ -16,15 +16,8 @@
     "matches": [
       "https://github.com/*"
     ],
-    "css": [
-      "src/inject/inject.css"
-    ]
-  }, {
-    "matches": [
-      "https://github.com/*"
-    ],
     "js": [
-      "src/inject/inject.js"
+      "dist/inject.js"
     ]
   }]
 }
