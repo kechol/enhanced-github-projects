@@ -28,5 +28,9 @@
     "typescript": "^3.4.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
+  },
+  "dependencies": {
+    "doma": "^1.0.3",
+    "select-dom": "^5.0.1"
   }
 }
