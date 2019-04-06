@@ -8,9 +8,14 @@
     "128": "icon.png"
   },
   "permissions": [
+    "storage",
     "https://github.com/*",
     "https://api.github.com/*"
   ],
+  "options_ui": {
+    "open_in_tab": false,
+    "page": "options.html"
+  },
   "content_scripts": [{
     "matches": [
       "https://github.com/*"
