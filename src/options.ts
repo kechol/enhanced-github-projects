@@ -1,20 +1,14 @@
+import { syncStorage } from "./lib/storage"
+
 function saveOptions(e: Event) {
   e.preventDefault();
   const personalToken = (document.getElementById("personal_token") as HTMLInputElement).value;
-  chrome.storage.sync.set({
-    personalToken
-  });
+  syncStorage.setOptions({ personalToken });
 }
 
-function restoreOptions() {
-  chrome.storage.sync.get(
-    {
-      personalToken: ""
-    },
-    function(items) {
-      (document.getElementById("personal_token") as HTMLInputElement).value = items.personalToken;
-    }
-  );
+async function restoreOptions() {
+  const options = await syncStorage.getOptions();
+  (document.getElementById("personal_token") as HTMLInputElement).value = options.personalToken;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
