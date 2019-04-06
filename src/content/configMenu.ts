@@ -10,7 +10,7 @@ interface HTMLDialogElement extends HTMLElement {
 
 const menuDom = `
   <div class="pl-4 hide-sm">
-    <button class="btn-link muted-link project-header-link v-align-middle no-underline no-wrap egp-show-config-dialog" type="button" aria-haspopup="true">
+    <button class="btn-link muted-link project-header-link v-align-middle no-underline no-wrap egp-open-config-dialog" type="button" aria-haspopup="true">
       <svg class="octicon octicon-three-bars" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M11.41 9H.59C0 9 0 8.59 0 8c0-.59 0-1 .59-1H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1h.01zm0-4H.59C0 5 0 4.59 0 4c0-.59 0-1 .59-1H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1h.01zM.59 11H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1H.59C0 13 0 12.59 0 12c0-.59 0-1 .59-1z"></path></svg> <span class="hide-md">EGP Config</span>
     </button>
   </div>
@@ -30,6 +30,13 @@ const dialogDom = `
               <dt><label for="personal_token">Personal Token</label></dt>
               <dd>
                 <input id="personal_token" name="personal_token" class="form-control" value="" />
+              </dd>
+            </dl>
+
+            <dl class="form-group">
+              <dt><label for="project_label_name">Label Name</label></dt>
+              <dd>
+                <input id="project_label_name" name="project_label_name" class="form-control" value="" />
               </dd>
             </dl>
 
@@ -54,31 +61,66 @@ const dialogDom = `
   </details>
 `;
 
-async function onClickShowConfigDialog() {
+function closeConfigDialog(e?: Event) {
+  if (e) {
+    e.preventDefault();
+  }
+
   const configDialog = select(".egp-config-dialog");
   if (configDialog) {
-    (configDialog as HTMLDialogElement).open = true;
-
-    const { personalToken } = await syncStorage.getOptions();
-    (document.getElementById("personal_token") as HTMLInputElement).value = personalToken;
+    (configDialog as HTMLDialogElement).open = false;
   }
 }
 
-function onClickSaveConfig() {
+async function openConfigDialog(e?: Event) {
+  if (e) {
+    e.preventDefault();
+  }
+
+  const configDialog = select(".egp-config-dialog");
+  const projectPath = location.pathname;
+
+  if (configDialog) {
+    (configDialog as HTMLDialogElement).open = true;
+
+    const options = await syncStorage.getOptions();
+    (document.getElementById("personal_token") as HTMLInputElement).value = options.personalToken;
+    if (options.projects[projectPath]) {
+      (document.getElementById("project_label_name") as HTMLInputElement).value = options.projects[projectPath]!.labelName;
+    }
+  }
+}
+
+async function saveConfig(e?: Event) {
+  if (e) {
+    e.preventDefault();
+  }
+
+  const projectPath = location.pathname;
   const personalToken = (document.getElementById("personal_token") as HTMLInputElement).value;
-  syncStorage.setOptions({ personalToken });
+  const projectLabelName = (document.getElementById("project_label_name") as HTMLInputElement).value;
+
+  syncStorage.setOptions({
+    personalToken,
+    projects: {
+      [projectPath]: { labelName: projectLabelName }
+    }
+  });
+
+  closeConfigDialog();
 }
 
 function init() {
   const headerControls = select(".project-header-controls");
+
   if (headerControls) {
     headerControls.append(doma(menuDom));
     if (!select.exists(".egp-config-dialog")) {
       document.body.append(doma(dialogDom));
     }
 
-    delegate(".egp-show-config-dialog", "click", onClickShowConfigDialog);
-    delegate(".egp-save-config", "click", onClickSaveConfig);
+    delegate(".egp-open-config-dialog", "click", openConfigDialog);
+    delegate(".egp-save-config", "click", saveConfig);
   }
 }
 
