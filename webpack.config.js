@@ -1,14 +1,18 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './src/inject/index.ts',
+  entry: {
+    content: './src/content',
+  },
   output: {
-    filename: 'inject.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js']
   },
+  devtool: 'sourcemap',
   module: {
     rules: [{
       test: /\.css$/,
@@ -23,4 +27,15 @@ module.exports = {
       exclude: /node_modules/
     }],
   },
+  plugins: [
+    new CopyWebpackPlugin([{
+      from: '*',
+      context: 'src',
+      ignore: [
+        '*.js',
+        '*.ts',
+        '*.tsx'
+      ]
+    }])
+  ]
 };

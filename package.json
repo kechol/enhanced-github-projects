@@ -21,6 +21,7 @@
   "homepage": "https://github.com/kechol/enhanced-github-projects#readme",
   "devDependencies": {
     "@types/chrome": "0.0.81",
+    "copy-webpack-plugin": "^5.0.2",
     "css-loader": "^2.1.1",
     "style-loader": "^0.23.1",
     "ts-loader": "^5.3.3",
