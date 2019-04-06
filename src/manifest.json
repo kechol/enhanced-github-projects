@@ -17,6 +17,7 @@
     "page": "options.html"
   },
   "content_scripts": [{
+    "run_at": "document_start",
     "matches": [
       "https://github.com/*"
     ],
