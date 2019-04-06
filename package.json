@@ -30,6 +30,7 @@
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
+    "delegate-it": "^1.0.2",
     "doma": "^1.0.3",
     "select-dom": "^5.0.1"
   }
