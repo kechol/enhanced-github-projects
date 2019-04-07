@@ -11,6 +11,14 @@ export const getProjectPath = (): string | null => {
   return null;
 };
 
+export const getProjectName = (): string | null => {
+  if (isProjectPage()) {
+    return document.title;
+  }
+
+  return null;
+};
+
 export const getOwnerAndRepo = (): { ownerName: string; repoName: string } => {
   const [_, ownerName, repoName] = location.pathname.split("/", 3);
   return { ownerName, repoName };

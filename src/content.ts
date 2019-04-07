@@ -15,8 +15,9 @@ chrome.runtime.sendMessage({}, function() {
 
       document.body.classList.add("enhanced-github-projects");
 
-      // init
+      // Init each functions
       configMenu();
+      importIssues();
     }
   }, 10);
 });
