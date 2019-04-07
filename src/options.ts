@@ -1,4 +1,4 @@
-import { syncStorage } from "./lib/storage"
+import { syncStorage } from "./utils/storage";
 
 function saveOptions(e: Event) {
   e.preventDefault();

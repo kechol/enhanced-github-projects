@@ -2,7 +2,8 @@ import doma from "doma";
 import select from "select-dom";
 import delegate from "delegate-it";
 
-import { syncStorage } from "../lib/storage";
+import { syncStorage } from "../utils/storage";
+import { getProjectPath } from "../utils/page";
 
 interface HTMLDialogElement extends HTMLElement {
   open: boolean;
@@ -61,7 +62,7 @@ const dialogDom = `
   </details>
 `;
 
-function closeConfigDialog(e?: Event) {
+export function closeConfigDialog(e?: Event) {
   if (e) {
     e.preventDefault();
   }
@@ -72,15 +73,15 @@ function closeConfigDialog(e?: Event) {
   }
 }
 
-async function openConfigDialog(e?: Event) {
+export async function openConfigDialog(e?: Event) {
   if (e) {
     e.preventDefault();
   }
 
   const configDialog = select(".egp-config-dialog");
-  const projectPath = location.pathname;
+  const projectPath = getProjectPath();
 
-  if (configDialog) {
+  if (configDialog && projectPath) {
     (configDialog as HTMLDialogElement).open = true;
 
     const options = await syncStorage.getOptions();
@@ -96,18 +97,20 @@ async function saveConfig(e?: Event) {
     e.preventDefault();
   }
 
-  const projectPath = location.pathname;
+  const projectPath = getProjectPath();
   const personalToken = (document.getElementById("personal_token") as HTMLInputElement).value;
   const projectLabelName = (document.getElementById("project_label_name") as HTMLInputElement).value;
 
-  syncStorage.setOptions({
-    personalToken,
-    projects: {
-      [projectPath]: { labelName: projectLabelName }
-    }
-  });
+  if (projectPath) {
+    syncStorage.setOptions({
+      personalToken,
+      projects: {
+        [projectPath]: { labelName: projectLabelName }
+      }
+    });
 
-  closeConfigDialog();
+    location.reload();
+  }
 }
 
 function init() {
