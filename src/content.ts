@@ -2,10 +2,13 @@ import select from "select-dom";
 
 import configMenu from "./content/configMenu";
 import importIssues from "./content/importIssues";
-import { is404, is500, isLoggedOut, isProjectPage } from "./utils/page";
+import { is404, is500, isLoggedOut, isProjectPage, getProjectName, getProjectPath } from "./utils/page";
+import { syncStorage } from "./utils/storage";
+import { fetchProject } from "./queries";
+import { WindowWithEGP } from "./interfaces/window";
 
 chrome.runtime.sendMessage({}, function() {
-  var readyStateCheckInterval = setInterval(function() {
+  var readyStateCheckInterval = setInterval(async function() {
     if (document.readyState === "complete") {
       clearInterval(readyStateCheckInterval);
 
@@ -13,11 +16,24 @@ chrome.runtime.sendMessage({}, function() {
         return;
       }
 
-      document.body.classList.add("enhanced-github-projects");
+      if (!(window as WindowWithEGP).__egp) {
+        (window as WindowWithEGP).__egp = {};
+      }
 
-      // Init each functions
+      document.body.classList.add("enhanced-github-projects");
       configMenu();
-      importIssues();
+
+      const projectName = getProjectName();
+      const projectPath = getProjectPath();
+      const options = await syncStorage.getOptions();
+      const projectOptions = options.projects[projectPath];
+
+      if (projectOptions) {
+        (window as WindowWithEGP).__egp.project = await fetchProject(projectName);
+        console.log("importIssues:fetchProject", (window as WindowWithEGP).__egp.project);
+
+        importIssues();
+      }
     }
   }, 10);
 });

@@ -3,20 +3,20 @@ export const is500 = (): boolean => document.title === "Server Error · GitHub" 
 export const isLoggedOut = (): boolean => document.body && document.body.classList.contains("logged-out");
 export const isProjectPage = (): boolean => document.body && document.body.classList.contains("project-page");
 
-export const getProjectPath = (): string | null => {
+export const getProjectPath = (): string => {
   if (isProjectPage()) {
     return location.pathname.replace(/^[/]|[/]$/g, "");
   }
 
-  return null;
+  return "";
 };
 
-export const getProjectName = (): string | null => {
+export const getProjectName = (): string => {
   if (isProjectPage()) {
     return document.title;
   }
 
-  return null;
+  return "";
 };
 
 export const getOwnerAndRepo = (): { ownerName: string; repoName: string } => {

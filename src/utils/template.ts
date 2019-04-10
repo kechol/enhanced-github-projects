@@ -1,7 +1,7 @@
 export const configMenuTemplate = `
   <div class="pl-4 hide-sm egp-config-menu">
     <button class="btn-link muted-link project-header-link v-align-middle no-underline no-wrap egp-open-config-dialog" type="button" aria-haspopup="true">
-      <svg class="octicon octicon-three-bars" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M11.41 9H.59C0 9 0 8.59 0 8c0-.59 0-1 .59-1H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1h.01zm0-4H.59C0 5 0 4.59 0 4c0-.59 0-1 .59-1H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1h.01zM.59 11H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1H.59C0 13 0 12.59 0 12c0-.59 0-1 .59-1z"></path></svg> <span class="hide-md">EGP Config</span>
+      <span class="hide-md">[EGP] Config</span>
     </button>
   </div>
 `;
@@ -12,7 +12,7 @@ export const configDialogTemplate = `
     <details-dialog class="Box Box--overlay d-flex flex-column anim-fade-in fast project-dialog" role="dialog">
       <div class="d-flex flex-column flex-auto overflow-hidden">
         <div class="Box-header">
-          <h3 class="Box-title">EGP Config</h3>
+          <h3 class="Box-title">[EGP] Config</h3>
         </div>
         <div class="Box-body border-0 rounded-0 m-0 py-0 overflow-auto">
           <form action="" class="pb-3">
@@ -54,6 +54,6 @@ export const configDialogTemplate = `
 export const importIssuesMenuItemTemplate = `
   <hr class="p-0 mt-2 mb-2">
   <button class="dropdown-item btn-link btn-block text-left egp-import-issues" role="menuitem" aria-expanded="false">
-    Import Issues
+    [EGP] Import Issues
   </button>
 `;
