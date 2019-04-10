@@ -53,7 +53,7 @@ export interface ProjectColumnNode {
 export interface ProjectCardNode {
   __typeName: "Issue"; // "Issue" | "PullRequest";
   column: ProjectColumnNode;
-  content: IssueNode; // IssueNode | PullRequestNode;
+  content: IssueNode | null; // IssueNode | PullRequestNode;
   createdAt: string;
   creator: ActorNode;
   databaseId: number;

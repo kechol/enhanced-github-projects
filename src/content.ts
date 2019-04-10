@@ -2,6 +2,7 @@ import select from "select-dom";
 
 import configMenu from "./content/configMenu";
 import importIssues from "./content/importIssues";
+import showColumnPoints from "./content/showColumnPoints";
 import { is404, is500, isLoggedOut, isProjectPage, getProjectName, getProjectPath } from "./utils/page";
 import { syncStorage } from "./utils/storage";
 import { fetchProject } from "./queries";
@@ -33,6 +34,7 @@ chrome.runtime.sendMessage({}, function() {
         console.log("importIssues:fetchProject", (window as WindowWithEGP).__egp.project);
 
         importIssues();
+        showColumnPoints();
       }
     }
   }, 10);
