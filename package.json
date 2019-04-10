@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/kechol/enhanced-github-projects#readme",
   "devDependencies": {
+    "@types/chart.js": "^2.7.50",
     "@types/chrome": "0.0.81",
     "copy-webpack-plugin": "^5.0.2",
     "css-loader": "^2.1.1",
@@ -30,6 +31,7 @@
     "webpack-cli": "^3.3.0"
   },
   "dependencies": {
+    "chart.js": "^2.8.0",
     "delegate-it": "^1.0.2",
     "doma": "^1.0.3",
     "select-dom": "^5.0.1"

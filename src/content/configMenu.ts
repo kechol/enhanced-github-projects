@@ -4,7 +4,7 @@ import delegate from "delegate-it";
 
 import { syncStorage } from "../utils/storage";
 import { getProjectPath } from "../utils/page";
-import { configDialogTemplate, configMenuTemplate } from "../utils/template";
+import { configDialogTemplate, configMenuItemTemplate } from "../utils/template";
 
 interface HTMLDialogElement extends HTMLElement {
   open: boolean;
@@ -63,13 +63,11 @@ async function saveConfig(e?: Event) {
 }
 
 function init() {
-  const headerControls = select(".project-header-controls");
+  const headerControlsDiv = select(".project-header-controls");
 
-  if (headerControls) {
-    headerControls.append(doma(configMenuTemplate));
-    if (!select.exists(".egp-config-dialog")) {
-      document.body.append(doma(configDialogTemplate));
-    }
+  if (headerControlsDiv) {
+    headerControlsDiv.append(doma(configMenuItemTemplate));
+    document.body.append(doma(configDialogTemplate));
 
     delegate(".egp-open-config-dialog", "click", openConfigDialog);
     delegate(".egp-save-config", "click", saveConfig);

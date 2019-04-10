@@ -1,5 +1,5 @@
-export const configMenuTemplate = `
-  <div class="pl-4 hide-sm egp-config-menu">
+export const configMenuItemTemplate = `
+  <div class="pl-4 hide-sm egp-config-menu-item">
     <button class="btn-link muted-link project-header-link v-align-middle no-underline no-wrap egp-open-config-dialog" type="button" aria-haspopup="true">
       <span class="hide-md">[EGP] Config</span>
     </button>
@@ -56,4 +56,18 @@ export const importIssuesMenuItemTemplate = `
   <button class="dropdown-item btn-link btn-block text-left egp-import-issues" role="menuitem" aria-expanded="false">
     [EGP] Import Issues
   </button>
+`;
+
+export const velocityMenuItemTemplate = `
+  <div class="pl-4 hide-sm egp-velocity-menu-item">
+    <button class="btn-link muted-link project-header-link v-align-middle no-underline no-wrap egp-open-velocity-chart" type="button" aria-haspopup="true">
+      <span class="hide-md">[EGP] Velocity</span>
+    </button>
+  </div>
+`;
+
+export const velocityChartContainerTemplate = `
+  <div class="p-2 egp-velocity-chart-container">
+    <canvas id="egp-velocity-chart"></canvas>
+  </div>
 `;

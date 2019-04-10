@@ -38,5 +38,8 @@ module.exports = {
         '*.tsx'
       ]
     }])
-  ]
+  ],
+  externals: {
+    moment: 'moment' // for Chart.js
+  }
 };

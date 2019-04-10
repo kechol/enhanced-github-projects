@@ -23,10 +23,10 @@ async function init() {
   const options = await syncStorage.getOptions();
   const projectPath = getProjectPath();
   const projectOptions = options.projects[projectPath];
-  const dropdownMenu = select(".project-column:first-child .details-container .dropdown-menu");
+  const dropdownMenuDiv = select(".project-column:first-child .details-container .dropdown-menu");
 
-  if (dropdownMenu && project && projectOptions) {
-    dropdownMenu.append(doma(importIssuesMenuItemTemplate));
+  if (dropdownMenuDiv && project && projectOptions) {
+    dropdownMenuDiv.append(doma(importIssuesMenuItemTemplate));
     delegate(".egp-import-issues", "click", () => importIssuesByLabel(project, projectOptions.labelNames || []));
   }
 }
