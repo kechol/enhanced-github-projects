@@ -3,7 +3,7 @@ interface Options {
   projects: {
     [projectPath: string]:
       | {
-          labelName: string;
+          labelNames: string[] | undefined;
         }
       | undefined;
   };

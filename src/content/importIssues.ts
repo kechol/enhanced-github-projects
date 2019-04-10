@@ -9,9 +9,9 @@ import { getProjectPath, getOwnerAndRepo, getProjectName } from "../utils/page";
 import { fetchProject, fetchIssuesByLabel, addProjectCard } from "../queries";
 import { importIssuesMenuItemTemplate } from "../utils/template";
 
-async function importIssuesByLabel(project: ProjectNode, labelName: string) {
-  const issuesData: IssuesData = await fetchIssuesByLabel(labelName);
-  console.log("importIssues:fetchIssuesByLabel", issuesData);
+async function importIssuesByLabel(project: ProjectNode, labelNames: string[]) {
+  const issuesData: IssuesData = await fetchIssuesByLabel(labelNames);
+  console.log("importIssues:fetchIssuesByLabel", labelNames, issuesData);
   issuesData.repository.issues.nodes.map(async issue => {
     await addProjectCard(issue.id, project.columns.nodes[0].id);
   });
@@ -27,7 +27,7 @@ async function init() {
     dropdownMenu.append(doma(importIssuesMenuItemTemplate));
     const project = await fetchProject(projectName);
     console.log("importIssues:fetchProject", project);
-    delegate(".egp-import-issues", "click", () => importIssuesByLabel(project, options.projects[projectPath]!.labelName));
+    delegate(".egp-import-issues", "click", () => importIssuesByLabel(project, options.projects[projectPath]!.labelNames || []));
   }
 }
 

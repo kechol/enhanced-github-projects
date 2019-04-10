@@ -3,12 +3,12 @@ import { getOwnerAndRepo } from "../utils/page";
 import { IssuesData, ProjectsData } from "../interfaces/github/query";
 import { ProjectNode } from "../interfaces/github/node";
 
-export const fetchIssuesByLabel = async (labelName: string): Promise<IssuesData> => {
+export const fetchIssuesByLabel = async (labelNames: string[]): Promise<IssuesData> => {
   const { ownerName, repoName } = getOwnerAndRepo();
   return await api.v4(`
     query {
       repository(owner: "${ownerName}", name: "${repoName}") {
-        issues(labels: ["${labelName}"], first: 100) {
+        issues(labels: ["${labelNames.join('","')}"], first: 100) {
           nodes {
             id
             number
