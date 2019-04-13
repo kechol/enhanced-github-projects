@@ -33,11 +33,7 @@ export async function openConfigDialog(e?: Event) {
     (configDialog as HTMLDialogElement).open = true;
 
     const options = await syncStorage.getOptions();
-    const projectOptions = options.projects[projectPath];
     (document.getElementById("personal_token") as HTMLInputElement).value = options.personalToken;
-    if (projectOptions) {
-      (document.getElementById("project_label_name") as HTMLInputElement).value = (projectOptions.labelNames || []).join(",");
-    }
   }
 }
 
@@ -48,16 +44,9 @@ async function saveConfig(e?: Event) {
 
   const projectPath = getProjectPath();
   const personalToken = (document.getElementById("personal_token") as HTMLInputElement).value;
-  const projectLabelNames = (document.getElementById("project_label_name") as HTMLInputElement).value.split(",");
 
   if (projectPath) {
-    syncStorage.setOptions({
-      personalToken,
-      projects: {
-        [projectPath]: { labelNames: projectLabelNames }
-      }
-    });
-
+    syncStorage.setOptions({ personalToken });
     location.reload();
   }
 }

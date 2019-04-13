@@ -4,6 +4,10 @@ export interface Error {
   message: string;
 }
 
+export interface SearchResultItemData {
+  search: Connection<IssueNode>;
+}
+
 export interface IssuesData {
   repository: {
     issues: Connection<IssueNode>;

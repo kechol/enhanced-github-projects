@@ -5,8 +5,6 @@ import * as Chart from "chart.js";
 
 import { WindowWithEGP } from "../interfaces/window";
 import { ProjectNode } from "../interfaces/github/node";
-import { syncStorage } from "../utils/storage";
-import { getProjectPath } from "../utils/page";
 import { velocityChartContainerTemplate, velocityMenuItemTemplate } from "../utils/template";
 import { velocityLabels, velocityData, colorOptions, velocityChartOptions } from "../utils/chart";
 
@@ -62,11 +60,8 @@ function setupVelocityChart(project: ProjectNode) {
 
 async function init() {
   const project = (window as WindowWithEGP).__egp.project;
-  const options = await syncStorage.getOptions();
-  const projectPath = getProjectPath();
-  const projectOptions = options.projects[projectPath];
 
-  if (project && projectOptions) {
+  if (project) {
     setupVelocityConfig();
     setupVelocityChart(project);
   }

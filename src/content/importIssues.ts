@@ -3,31 +3,39 @@ import select from "select-dom";
 import delegate from "delegate-it";
 
 import { WindowWithEGP } from "../interfaces/window";
-import { IssuesData } from "../interfaces/github/query";
-import { ProjectNode } from "../interfaces/github/node";
-import { syncStorage } from "../utils/storage";
-import { getProjectPath } from "../utils/page";
-import { fetchIssuesByLabel, addProjectCard } from "../queries";
+import { IssueNode } from "../interfaces/github/node";
+import { getSearchText } from "../utils/page";
+import { fetchAllIssuesByLabel, addProjectCard } from "../queries";
 import { importIssuesMenuItemTemplate } from "../utils/template";
 
-async function importIssuesByLabel(project: ProjectNode, labelNames: string[]) {
-  const issuesData: IssuesData = await fetchIssuesByLabel(labelNames);
-  console.log("importIssues:fetchIssuesByLabel", labelNames, issuesData);
-  issuesData.repository.issues.nodes.map(async issue => {
-    await addProjectCard(issue.id, project.columns.nodes[0].id);
-  });
+async function importIssuesByLabel(columnId: string) {
+  const searchText = getSearchText();
+  if (searchText != "") {
+    const issues: Array<IssueNode> = await fetchAllIssuesByLabel(searchText);
+    console.log("importIssues:fetchIssuesByLabel", searchText, issues);
+    issues.map(async issue => {
+      await addProjectCard(issue.id, columnId);
+    });
+  }
 }
 
 async function init() {
   const project = (window as WindowWithEGP).__egp.project;
-  const options = await syncStorage.getOptions();
-  const projectPath = getProjectPath();
-  const projectOptions = options.projects[projectPath];
-  const dropdownMenuDiv = select(".project-column:first-child .details-container .dropdown-menu");
 
-  if (dropdownMenuDiv && project && projectOptions) {
-    dropdownMenuDiv.append(doma(importIssuesMenuItemTemplate));
-    delegate(".egp-import-issues", "click", () => importIssuesByLabel(project, projectOptions.labelNames || []));
+  if (project) {
+    project.columns.nodes.map(column => {
+      const dropdownMenuDiv = select(`#column-${column.databaseId} > .js-details-container .dropdown-menu`);
+      if (dropdownMenuDiv) {
+        dropdownMenuDiv.append(doma(importIssuesMenuItemTemplate(column.id)));
+      }
+    });
+
+    delegate(".egp-import-issues", "click", (e: Event) => {
+      const target = e.target as HTMLElement;
+      if (target && target.dataset.columnId) {
+        importIssuesByLabel(target.dataset.columnId);
+      }
+    });
   }
 }
 

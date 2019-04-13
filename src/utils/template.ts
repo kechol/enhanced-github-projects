@@ -23,13 +23,6 @@ export const configDialogTemplate = `
               </dd>
             </dl>
 
-            <dl class="form-group">
-              <dt><label for="project_label_name">Label Name</label></dt>
-              <dd>
-                <input id="project_label_name" name="project_label_name" class="form-control" value="" />
-              </dd>
-            </dl>
-
             <div class="form-actions d-flex d-sm-block">
               <button class="btn btn-primary flex-auto float-sm-left egp-save-config">Save</button>
             </div>
@@ -51,9 +44,9 @@ export const configDialogTemplate = `
   </details>
 `;
 
-export const importIssuesMenuItemTemplate = `
+export const importIssuesMenuItemTemplate = (columnId: string) => `
   <hr class="p-0 mt-2 mb-2">
-  <button class="dropdown-item btn-link btn-block text-left egp-import-issues" role="menuitem" aria-expanded="false">
+  <button class="dropdown-item btn-link btn-block text-left egp-import-issues" role="menuitem" aria-expanded="false" data-column-id="${columnId}">
     [EGP] Import Issues
   </button>
 `;

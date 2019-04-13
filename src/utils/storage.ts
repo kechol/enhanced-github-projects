@@ -1,11 +1,7 @@
 interface Options {
   personalToken: string;
   projects: {
-    [projectPath: string]:
-      | {
-          labelNames: string[] | undefined;
-        }
-      | undefined;
+    [projectPath: string]: {} | undefined;
   };
 }
 
