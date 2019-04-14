@@ -8,6 +8,7 @@ import showColumnPoints from "./content/showColumnPoints";
 import showVelocityChart from "./content/showVelocityChart";
 import { is404, is500, isLoggedOut, isProjectPage, getProjectName, getProjectPath } from "./utils/page";
 import { syncStorage } from "./utils/storage";
+import { debug } from "./utils/debug";
 import { fetchProject } from "./queries";
 import { WindowWithEGP } from "./interfaces/window";
 

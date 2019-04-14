@@ -23,6 +23,7 @@
     "@types/chart.js": "^2.7.50",
     "@types/chrome": "0.0.81",
     "@types/lodash-es": "^4.17.3",
+    "@types/node": "^11.13.4",
     "copy-webpack-plugin": "^5.0.2",
     "css-loader": "^2.1.1",
     "style-loader": "^0.23.1",

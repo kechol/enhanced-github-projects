@@ -2,6 +2,7 @@ import api from "../utils/api";
 import { getOwnerAndRepo } from "../utils/page";
 import { ProjectsData, SearchResultItemData } from "../interfaces/github/query";
 import { ProjectNode, IssueNode } from "../interfaces/github/node";
+import { debug } from "../utils/debug";
 
 export const fetchAllIssuesByLabel = async (searchText: string): Promise<Array<IssueNode>> => {
   const { ownerName, repoName } = getOwnerAndRepo();
@@ -19,8 +20,10 @@ export const fetchAllIssuesByLabel = async (searchText: string): Promise<Array<I
       hasNextPage = result.search.pageInfo.hasNextPage;
       results = results.concat(result.search.nodes);
     }
+
+    debug("fetchAllIssuesByLabel", searchText, results);
   } catch (e) {
-    console.error("[EGP] fetchAllIssuesByLabel", e);
+    debug("ERROR: fetchAllIssuesByLabel", e);
   }
 
   return results;
@@ -169,19 +172,22 @@ export const fetchProject = async (projectName: string): Promise<ProjectNode> =>
       }
     `);
 
-    if (projects.repository.projects.nodes.length !== 1) {
-      throw new Error(`[EGP] fetchProject totalCount ${projects.repository.projects.totalCount}`);
+    const projectNodes = projects.repository.projects.nodes;
+
+    if (projectNodes.length !== 1) {
+      throw new Error(`fetchProject totalCount ${projectNodes.length}`);
     }
 
-    return projects.repository.projects.nodes[0];
+    debug("fetchProject", projectNodes[0]);
+    return projectNodes[0];
   } catch (e) {
-    console.error("[EGP] fetchProject", e);
+    debug("ERROR: fetchProject", e);
     return Promise.reject(e);
   }
 };
 
 export const addProjectCard = (contentId: string, projectColumnId: string, clientMutationId?: string) => {
-  return api.v4(`
+  const result = api.v4(`
     mutation {
       addProjectCard(input: {
         clientMutationId: "${clientMutationId || 0}",
@@ -227,4 +233,7 @@ export const addProjectCard = (contentId: string, projectColumnId: string, clien
       }
     }
   `);
+
+  debug("addProjectCard", result);
+  return result;
 };

@@ -12,7 +12,6 @@ async function importIssuesByLabel(columnId: string) {
   const searchText = getSearchText();
   if (searchText != "") {
     const issues: Array<IssueNode> = await fetchAllIssuesByLabel(searchText);
-    console.log("importIssues:fetchIssuesByLabel", searchText, issues);
     issues.map(async issue => {
       await addProjectCard(issue.id, columnId);
     });
