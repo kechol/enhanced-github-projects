@@ -3,7 +3,7 @@ import * as EventEmitter from "eventemitter3";
 import throttle from "lodash-es/throttle";
 
 import configMenu from "./content/configMenu";
-import importIssues from "./content/importIssues";
+import importIssuesMenu from "./content/importIssuesMenu";
 import showColumnPoints from "./content/showColumnPoints";
 import showVelocityChart from "./content/showVelocityChart";
 import { is404, is500, isLoggedOut, isProjectPage, getProjectName, getProjectPath } from "./utils/page";
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   configMenu();
   watchDOMChange();
-  importIssues();
+  importIssuesMenu();
   showColumnPoints();
   showVelocityChart();
 
