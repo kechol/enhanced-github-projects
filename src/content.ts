@@ -10,7 +10,7 @@ import { is404, is500, isLoggedOut, isProjectPage, getProjectName, getProjectPat
 import { syncStorage } from "./utils/storage";
 import { debug } from "./utils/debug";
 import { fetchProject } from "./queries";
-import { WindowWithEGP } from "./interfaces/window";
+import { WindowWithEGP } from "./interfaces/egp";
 
 document.addEventListener("DOMContentLoaded", () => {
   if (is404() || is500() || isLoggedOut() || !isProjectPage()) {

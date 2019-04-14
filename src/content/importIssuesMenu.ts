@@ -2,7 +2,7 @@ import doma from "doma";
 import select from "select-dom";
 import delegate from "delegate-it";
 
-import { WindowWithEGP } from "../interfaces/window";
+import { WindowWithEGP } from "../interfaces/egp";
 import { IssueNode, ProjectNode } from "../interfaces/github/node";
 import { getSearchText } from "../utils/page";
 import { fetchAllIssuesByLabel, addProjectCard } from "../queries";
@@ -18,7 +18,7 @@ async function importIssuesByLabel(columnId: string) {
   }
 }
 
-async function init() {
+function init() {
   (window as WindowWithEGP).__egp.emitter.once("egp:loadProject:done", (project: ProjectNode) => {
     project.columns.nodes.map(column => {
       const dropdownMenuDiv = select(`#column-${column.databaseId} > .js-details-container .dropdown-menu`);

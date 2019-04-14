@@ -1,3 +1,5 @@
+import { EgpProjectConfig, CountMethodEnum } from "../interfaces/egp";
+
 export const configMenuItemTemplate = `
   <div class="pl-4 hide-sm egp-config-menu-item">
     <button class="btn-link muted-link project-header-link v-align-middle no-underline no-wrap egp-open-config-dialog" type="button" aria-haspopup="true">
@@ -6,7 +8,7 @@ export const configMenuItemTemplate = `
   </div>
 `;
 
-export const configDialogTemplate = `
+export const configDialogTemplate = (personalToken: string, projectDefaults: EgpProjectConfig) => `
   <details class="details-reset details-overlay details-overlay-dark lh-default text-gray-dark egp-config-dialog">
     <summary aria-haspopup="dialog" aria-label="Close dialog"></summary>
     <details-dialog class="Box Box--overlay d-flex flex-column anim-fade-in fast project-dialog" role="dialog">
@@ -17,9 +19,22 @@ export const configDialogTemplate = `
         <div class="Box-body border-0 rounded-0 m-0 py-0 overflow-auto">
           <form action="" class="pb-3">
             <dl class="form-group">
-              <dt><label for="personal_token">Personal Token</label></dt>
+              <dt><label for="personal_token">Personal token</label></dt>
               <dd>
-                <input id="personal_token" name="personal_token" class="form-control" value="" />
+                <input id="personal_token" name="personal_token" class="form-control" value="${personalToken}" />
+              </dd>
+            </dl>
+
+            <hr />
+
+            <dl class="form-group">
+              <dt><label>Count method</label></dt>
+              <dd>
+                <p>Set how to count story points. For title method, put [Npts] on each title.</p>
+                <select id="velocity_calculation" name="velocity_calculation" class="form-select">
+                  <option value="Issue" ${CountMethodEnum.Issue == projectDefaults.countMethod ? " selected" : ""}>Per issue</option>
+                  <option value="Title" ${CountMethodEnum.Title == projectDefaults.countMethod ? " selected" : ""}>Per points on title</option>
+                </select>
               </dd>
             </dl>
 

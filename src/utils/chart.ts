@@ -1,11 +1,17 @@
 import { ProjectColumnNode, ProjectCardNode } from "../interfaces/github/node";
+import { CountMethodEnum } from "../interfaces/egp";
+
+interface CountPointOptions {
+  state?: "OPEN" | "CLOSED";
+  countMethod?: CountMethodEnum;
+}
 
 export function velocityLabels(columns: Array<ProjectColumnNode>) {
   return columns.map(column => column.name);
 }
 
-export function velocityData(columns: Array<ProjectColumnNode>, state: "OPEN" | "CLOSED") {
-  return columns.map(column => countPoint(column, state));
+export function velocityData(columns: Array<ProjectColumnNode>, options: CountPointOptions = {}) {
+  return columns.map(column => countPoint(column, options));
 }
 
 export function velocityChartOptions() {
@@ -35,20 +41,20 @@ export function velocityChartOptions() {
   };
 }
 
-export function velocityChartData(columns: Array<ProjectColumnNode>) {
+export function velocityChartData(columns: Array<ProjectColumnNode>, options: Pick<CountPointOptions, "countMethod"> = {}) {
   return {
     labels: velocityLabels(columns),
     datasets: [
       {
         label: "CLOSED",
-        data: velocityData(columns, "CLOSED"),
+        data: velocityData(columns, { state: "CLOSED", countMethod: options.countMethod }),
         backgroundColor: colorOptions(columns.length, 0.6),
         borderColor: colorOptions(columns.length, 1),
         borderWidth: 1
       },
       {
         label: "OPEN",
-        data: velocityData(columns, "OPEN"),
+        data: velocityData(columns, { state: "OPEN", countMethod: options.countMethod }),
         backgroundColor: colorOptions(columns.length, 0.2),
         borderColor: colorOptions(columns.length, 1),
         borderWidth: 1
@@ -87,21 +93,39 @@ export function colorOptions(length: number = 1, alpha: number = 0.8, variety: b
   return options;
 }
 
-export function countPoint(column: ProjectColumnNode, state: "OPEN" | "CLOSED" | undefined = undefined) {
+export function countPoint(column: ProjectColumnNode, options: CountPointOptions = {}) {
   let total = 0;
 
   column.cards.nodes.map((card: ProjectCardNode) => {
-    if (state) {
-      if (card.content && state === card.content.state) {
-        total += 1;
-      } else if (!card.content && state === "OPEN") {
+    if (options.state) {
+      if (card.content && options.state === card.content.state) {
+        total += getCardPoint(card, options.countMethod);
+      } else if (!card.content && options.state === "OPEN") {
         // Handle note cards as OPEN state
-        total += 1;
+        total += getCardPoint(card, options.countMethod);
       }
     } else {
-      total += 1;
+      total += getCardPoint(card, options.countMethod);
     }
   });
 
   return total;
+}
+
+function getCardPoint(card: ProjectCardNode, countMethod: CountMethodEnum | undefined) {
+  switch (countMethod) {
+    case CountMethodEnum.Issue:
+      return 1;
+    case CountMethodEnum.Title:
+      const title = card.note || card.content!.title;
+      const ptRegex = /\[([0-9]+)\s*pt\]/;
+      const matched = title.match(ptRegex);
+      if (matched) {
+        return parseInt(matched[1], 10);
+      } else {
+        return 1;
+      }
+    default:
+      return 1;
+  }
 }

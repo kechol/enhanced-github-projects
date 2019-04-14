@@ -10,3 +10,19 @@ export interface WindowWithEGP extends Window {
     velocityChart?: Chart;
   };
 }
+
+export interface EgpConfig {
+  personalToken: string;
+  projects: {
+    [projectPath: string]: EgpProjectConfig;
+  };
+}
+
+export interface EgpProjectConfig {
+  countMethod?: CountMethodEnum;
+}
+
+export enum CountMethodEnum {
+  Issue,
+  Title
+}

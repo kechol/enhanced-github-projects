@@ -2,9 +2,11 @@ import doma from "doma";
 import select from "select-dom";
 import delegate from "delegate-it";
 
-import { syncStorage } from "../utils/storage";
+import { syncStorage, getProjectConfig } from "../utils/storage";
 import { getProjectPath } from "../utils/page";
 import { configDialogTemplate, configMenuItemTemplate } from "../utils/template";
+import { debug } from "../utils/debug";
+import { CountMethodEnum } from "../interfaces/egp";
 
 interface HTMLDialogElement extends HTMLElement {
   open: boolean;
@@ -31,9 +33,6 @@ export async function openConfigDialog(e?: Event) {
 
   if (configDialog && projectPath) {
     (configDialog as HTMLDialogElement).open = true;
-
-    const options = await syncStorage.getOptions();
-    (document.getElementById("personal_token") as HTMLInputElement).value = options.personalToken;
   }
 }
 
@@ -44,19 +43,34 @@ async function saveConfig(e?: Event) {
 
   const projectPath = getProjectPath();
   const personalToken = (document.getElementById("personal_token") as HTMLInputElement).value;
+  const countMethodKey = (document.getElementById("velocity_calculation") as HTMLInputElement).value as keyof typeof CountMethodEnum;
 
   if (projectPath) {
-    syncStorage.setOptions({ personalToken });
+    const newOptions = {
+      personalToken,
+      projects: {
+        [projectPath]: {
+          countMethod: CountMethodEnum[countMethodKey]
+        }
+      }
+    };
+
+    syncStorage.setOptions(newOptions);
     location.reload();
   }
 }
 
-function init() {
+async function init() {
   const headerControlsDiv = select(".project-header-controls");
 
   if (headerControlsDiv) {
+    const personalToken = (await syncStorage.getOptions()).personalToken;
+    const projectConfig = await getProjectConfig();
+
+    debug("configMenu:init", { personalToken }, projectConfig);
+
     headerControlsDiv.append(doma(configMenuItemTemplate));
-    document.body.append(doma(configDialogTemplate));
+    document.body.append(doma(configDialogTemplate(personalToken, projectConfig)));
 
     delegate(".egp-open-config-dialog", "click", openConfigDialog);
     delegate(".egp-save-config", "click", saveConfig);
