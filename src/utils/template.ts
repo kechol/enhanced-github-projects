@@ -30,10 +30,10 @@ export const configDialogTemplate = (personalToken: string, projectDefaults: Egp
             <dl class="form-group">
               <dt><label>Count method</label></dt>
               <dd>
-                <p>Set how to count story points. For title method, put [Npts] on each title.</p>
+                <p>Set how to count story points. For title method, put [Npt] on each title.</p>
                 <select id="velocity_calculation" name="velocity_calculation" class="form-select">
-                  <option value="Issue" ${CountMethodEnum.Issue == projectDefaults.countMethod ? " selected" : ""}>Per issue</option>
-                  <option value="Title" ${CountMethodEnum.Title == projectDefaults.countMethod ? " selected" : ""}>Per points on title</option>
+                  <option value="Issue" ${CountMethodEnum.Issue == projectDefaults.countMethod ? " selected" : ""}>By issue</option>
+                  <option value="Title" ${CountMethodEnum.Title == projectDefaults.countMethod ? " selected" : ""}>By point on title</option>
                 </select>
               </dd>
             </dl>

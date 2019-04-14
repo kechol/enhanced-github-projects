@@ -118,7 +118,7 @@ function getCardPoint(card: ProjectCardNode, countMethod: CountMethodEnum | unde
       return 1;
     case CountMethodEnum.Title:
       const title = card.note || card.content!.title;
-      const ptRegex = /\[([0-9]+)\s*pt\]/;
+      const ptRegex = /\[([0-9]+)\s*pts?\]/;
       const matched = title.match(ptRegex);
       if (matched) {
         return parseInt(matched[1], 10);
