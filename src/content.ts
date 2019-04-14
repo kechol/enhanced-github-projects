@@ -49,11 +49,11 @@ export const loadProject = async () => {
 };
 
 export const watchDOMChange = () => {
-  const reloadableActions = ["column_reorder"];
+  const reloadableActions = ["card_update", "card_destroy", "column_reorder", "column_destroyed", "column_create"];
 
   const reloadProject = throttle((e: CustomEvent) => {
     debug(e.type, e.detail.name, e.detail.data);
-    if (/projects:cards/.test(e.detail.name) || reloadableActions.includes(e.detail.data.action)) {
+    if (reloadableActions.includes(e.detail.data.action)) {
       (window as WindowWithEGP).__egp.emitter.emit("egp:loadProject:start");
     }
   }, 3000);
