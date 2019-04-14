@@ -10,6 +10,9 @@ export function velocityData(columns: Array<ProjectColumnNode>, state: "OPEN" | 
 
 export function velocityChartOptions() {
   return {
+    animation: {
+      duration: 0
+    },
     maintainAspectRatio: false,
     scales: {
       yAxes: [
@@ -17,12 +20,14 @@ export function velocityChartOptions() {
           stacked: true,
           ticks: {
             stepSize: 1,
-            beginAtZero: true
+            beginAtZero: true,
+            suggestedMax: 8
           }
         }
       ],
       xAxes: [
         {
+          maxBarThickness: 80,
           stacked: true
         }
       ]
@@ -86,8 +91,11 @@ export function countPoint(column: ProjectColumnNode, state: "OPEN" | "CLOSED" |
   let total = 0;
 
   column.cards.nodes.map((card: ProjectCardNode) => {
-    if (state && card.content) {
-      if (state === card.content.state) {
+    if (state) {
+      if (card.content && state === card.content.state) {
+        total += 1;
+      } else if (!card.content && state === "OPEN") {
+        // Handle note cards as OPEN state
         total += 1;
       }
     } else {
