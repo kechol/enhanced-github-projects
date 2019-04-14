@@ -1,4 +1,6 @@
-import select from "select-dom";
+import delegate from "delegate-it";
+import * as EventEmitter from "eventemitter3";
+import throttle from "lodash-es/throttle";
 
 import configMenu from "./content/configMenu";
 import importIssues from "./content/importIssues";
@@ -9,37 +11,47 @@ import { syncStorage } from "./utils/storage";
 import { fetchProject } from "./queries";
 import { WindowWithEGP } from "./interfaces/window";
 
-chrome.runtime.sendMessage({}, function() {
-  var readyStateCheckInterval = setInterval(async function() {
-    if (document.readyState === "complete") {
-      clearInterval(readyStateCheckInterval);
+document.addEventListener("DOMContentLoaded", () => {
+  if (is404() || is500() || isLoggedOut() || !isProjectPage()) {
+    return;
+  }
 
-      if (is404() || is500() || isLoggedOut() || !isProjectPage()) {
-        return;
-      }
+  if (!(window as WindowWithEGP).__egp) {
+    (window as WindowWithEGP).__egp = {
+      project: undefined,
+      emitter: new EventEmitter()
+    };
+  }
 
-      if (!(window as WindowWithEGP).__egp) {
-        (window as WindowWithEGP).__egp = {};
-      }
+  configMenu();
+  watchDOMChange();
+  importIssues();
+  showColumnPoints();
+  showVelocityChart();
 
-      document.body.classList.add("enhanced-github-projects");
-      configMenu();
-
-      const projectName = getProjectName();
-      const projectPath = getProjectPath();
-      const options = await syncStorage.getOptions();
-      const projectOptions = options.projects[projectPath];
-
-      if (projectOptions) {
-        (window as WindowWithEGP).__egp.project = await fetchProject(projectName);
-        console.log("importIssues:fetchProject", (window as WindowWithEGP).__egp.project);
-
-        importIssues();
-        showColumnPoints();
-        showVelocityChart();
-      }
-    }
-  }, 10);
+  document.body.classList.add("enhanced-github-projects");
+  (window as WindowWithEGP).__egp.emitter.on("egp:loadProject:start", loadProject);
+  (window as WindowWithEGP).__egp.emitter.emit("egp:loadProject:start");
 });
 
-(window as any).select = select;
+export const loadProject = async () => {
+  const projectName = getProjectName();
+  const projectPath = getProjectPath();
+  const options = await syncStorage.getOptions();
+  const projectOptions = options.projects[projectPath];
+
+  if (projectOptions) {
+    const project = await fetchProject(projectName);
+    (window as WindowWithEGP).__egp.project = project;
+    (window as WindowWithEGP).__egp.emitter.emit("egp:loadProject:done", project);
+  }
+};
+
+export const watchDOMChange = () => {
+  const reloadProject = throttle((e: CustomEvent) => {
+    console.log(e.type);
+    (window as WindowWithEGP).__egp.emitter.emit("egp:loadProject:start");
+  }, 3000);
+
+  delegate(".js-socket-channel", "socket:message", reloadProject);
+};

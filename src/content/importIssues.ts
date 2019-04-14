@@ -3,7 +3,7 @@ import select from "select-dom";
 import delegate from "delegate-it";
 
 import { WindowWithEGP } from "../interfaces/window";
-import { IssueNode } from "../interfaces/github/node";
+import { IssueNode, ProjectNode } from "../interfaces/github/node";
 import { getSearchText } from "../utils/page";
 import { fetchAllIssuesByLabel, addProjectCard } from "../queries";
 import { importIssuesMenuItemTemplate } from "../utils/template";
@@ -20,9 +20,7 @@ async function importIssuesByLabel(columnId: string) {
 }
 
 async function init() {
-  const project = (window as WindowWithEGP).__egp.project;
-
-  if (project) {
+  (window as WindowWithEGP).__egp.emitter.once("egp:loadProject:done", (project: ProjectNode) => {
     project.columns.nodes.map(column => {
       const dropdownMenuDiv = select(`#column-${column.databaseId} > .js-details-container .dropdown-menu`);
       if (dropdownMenuDiv) {
@@ -36,7 +34,7 @@ async function init() {
         importIssuesByLabel(target.dataset.columnId);
       }
     });
-  }
+  });
 }
 
 export default init;

@@ -30,6 +30,28 @@ export function velocityChartOptions() {
   };
 }
 
+export function velocityChartData(columns: Array<ProjectColumnNode>) {
+  return {
+    labels: velocityLabels(columns),
+    datasets: [
+      {
+        label: "CLOSED",
+        data: velocityData(columns, "CLOSED"),
+        backgroundColor: colorOptions(columns.length, 0.6),
+        borderColor: colorOptions(columns.length, 1),
+        borderWidth: 1
+      },
+      {
+        label: "OPEN",
+        data: velocityData(columns, "OPEN"),
+        backgroundColor: colorOptions(columns.length, 0.2),
+        borderColor: colorOptions(columns.length, 1),
+        borderWidth: 1
+      }
+    ]
+  };
+}
+
 export function colorOptions(length: number = 1, alpha: number = 0.8, variety: boolean = false) {
   const colorDefaults = [
     `rgba(229, 36, 59, ${alpha})`,
