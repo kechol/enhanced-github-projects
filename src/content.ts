@@ -49,10 +49,16 @@ export const loadProject = async () => {
 };
 
 export const watchDOMChange = () => {
+  const reloadableActions = ["column_reorder"];
+
   const reloadProject = throttle((e: CustomEvent) => {
-    console.log(e.type);
-    (window as WindowWithEGP).__egp.emitter.emit("egp:loadProject:start");
+    debug(e.type, e.detail.name, e.detail.data);
+    if (/projects:cards/.test(e.detail.name) || reloadableActions.includes(e.detail.data.action)) {
+      (window as WindowWithEGP).__egp.emitter.emit("egp:loadProject:start");
+    }
   }, 3000);
 
-  delegate(".js-socket-channel", "socket:message", reloadProject);
+  delegate(".js-project-columns-container", "socket:message", reloadProject);
+  // delegate(".js-project-column", "socket:message", reloadProject);
+  // delegate(".js-project-column-card", "socket:message", reloadProject);
 };
